@@ -9,14 +9,29 @@ const Button = (props) => (
   </button>
 )
 
+const Statistics = (props) => {
+
+  const all = props.good + props.neutral + props.bad;
+  const average = (all != 0) ? (props.good - props.bad) / all : 0;
+  const positive = (all != 0) ? String(props.good / all * 100).concat("%") : 0;
+
+  return (
+    <div>
+      <Display value={all} text="all" />
+      <Display value={average} text="average" />
+      <Display value={positive} text="positive" />
+    </div>
+  )
+}
+
+
+
 const App = () => {
   // save clicks of each button to own state
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
-  const all = good + neutral + bad;
-  const average = (all != 0) ? (good - bad) / all : 0;
-  const positive = (all != 0) ? String(good / all * 100).concat("%") : 0;
+
 
 
   return (
@@ -32,9 +47,7 @@ const App = () => {
       <Display value={good} text="good" />
       <Display value={neutral} text="neutral" />
       <Display value={bad} text="bad" />
-      <Display value={all} text="all" />
-      <Display value={average} text="average" />
-      <Display value={positive} text="positive" />
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
