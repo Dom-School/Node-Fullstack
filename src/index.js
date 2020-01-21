@@ -1,7 +1,6 @@
+
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-
-//const Display = props => <p>{props.text} {props.value}</p>
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
@@ -9,59 +8,43 @@ const Button = (props) => (
   </button>
 )
 
-const Statistic = props => (
-  <tr>
-    <td>{props.text}</td>
-    <td>{props.value}</td>
-  </tr>
-)
+function getRandomInt(num, prev) {
+  let result = Math.floor(Math.random() * Math.floor(num));
 
-const Statistics = (props) => {
-
-  if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
-    return <p>No feedback given</p>
+  while (result === prev) {
+    result = Math.floor(Math.random() * Math.floor(num));
   }
+  console.log(result);
+  return result;
+}
 
-  const all = props.good + props.neutral + props.bad;
-  const average = (props.good - props.bad) / all;
-  const positive = String(props.good / all * 100).concat("%");
+
+const App = (props) => {
+  const [selected, setSelected] = useState(0)
+
 
   return (
     <div>
-      <h1>statistics</h1>
+      <Button handleClick={() => setSelected(getRandomInt(props.anecdotes.length, selected))}
+        text="next anecdote" />
+      <br></br>
+      {props.anecdotes[selected]}
 
-      <table>
-        <Statistic value={props.good} text="good" />
-        <Statistic value={props.neutral} text="neutral" />
-        <Statistic value={props.bad} text="bad" />
 
-        <Statistic value={all} text="all" />
-        <Statistic value={average} text="average" />
-        <Statistic value={positive} text="positive" />
-      </table>
     </div>
   )
 }
 
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
 
-
-const App = () => {
-  // save clicks of each button to own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-
-  return (
-    <div>
-      <h1>give feedback</h1>
-
-      <Button handleClick={() => setGood(good + 1)} text="good" />
-      <Button handleClick={() => setNeutral(neutral + 1)} text="neutral" />
-      <Button handleClick={() => setBad(bad + 1)} text="bad" />
-
-      <Statistics good={good} neutral={neutral} bad={bad} />
-    </div>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+  <App anecdotes={anecdotes} />,
+  document.getElementById('root')
+)
