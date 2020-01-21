@@ -14,21 +14,49 @@ function getRandomInt(num, prev) {
   while (result === prev) {
     result = Math.floor(Math.random() * Math.floor(num));
   }
-  console.log(result);
   return result;
+}
+
+function vote(selected) {
+  const copy = { ...points }
+  copy[selected] += 1;
+
+  //return result;
 }
 
 
 const App = (props) => {
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState({
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0
+  })
 
+
+  console.log(votes)
+
+  const anecdote = getRandomInt(props.anecdotes.length, selected);
+
+  const handleClick = () => {
+    const copy = { ...points }
+    copy[selected] += 1
+    setVotes(copy)
+  }
 
   return (
     <div>
-      <Button handleClick={() => setSelected(getRandomInt(props.anecdotes.length, selected))}
+      <Button handleClick={() => setSelected(anecdote)}
         text="next anecdote" />
+      <Button handleClick={() => handleClick()}
+        text="vote" />
       <br></br>
       {props.anecdotes[selected]}
+      <br></br>
+      {votes[selected]}
 
 
     </div>
@@ -43,8 +71,16 @@ const anecdotes = [
   'Premature optimization is the root of all evil.',
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
+const points = {
+  0: 0,
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0,
+  5: 0
+}
 
 ReactDOM.render(
-  <App anecdotes={anecdotes} />,
+  <App anecdotes={anecdotes} points={points} />,
   document.getElementById('root')
 )
