@@ -8,15 +8,6 @@ const Button = (props) => (
   </button>
 )
 
-function getRandomInt(num, prev) {
-  let result = Math.floor(Math.random() * Math.floor(num));
-
-  while (result === prev) {
-    result = Math.floor(Math.random() * Math.floor(num));
-  }
-  return result;
-}
-
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState({
@@ -28,7 +19,14 @@ const App = (props) => {
     5: 0
   })
 
-  const anecdote = getRandomInt(props.anecdotes.length, selected);
+  const getRandomInt = (num, prev) => {
+    let result = Math.floor(Math.random() * Math.floor(num));
+
+    while (result === prev) {
+      result = Math.floor(Math.random() * Math.floor(num));
+    }
+    return result;
+  }
 
   const handleVote = () => {
     const copy = { ...votes }
@@ -36,17 +34,25 @@ const App = (props) => {
     setVotes(copy)
   }
 
+  const anecdote = getRandomInt(props.anecdotes.length, selected);
+  const mostVotesIndex = Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b)
+
+  console.log()
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <Button handleClick={() => setSelected(anecdote)}
         text="next anecdote" />
       <Button handleClick={() => handleVote()}
         text="vote" />
       <br></br>
-      {props.anecdotes[selected]}
+      <p>{props.anecdotes[selected]}</p>
       <br></br>
-      Votes: {votes[selected]}
+      <p>Votes: {votes[selected]}</p>
 
+      <h1>Anecdote with the most votes</h1>
+      <p>{props.anecdotes[mostVotesIndex]}</p>
 
     </div>
   )
